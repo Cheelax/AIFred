@@ -1,6 +1,6 @@
 from flask import Blueprint, g, request, session, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.web.db.models import User
+from web.db.models import User
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 

@@ -1,5 +1,5 @@
 import uuid
-from app.web.db import db
+from web.db import db
 from .base import BaseModel
 
 
@@ -21,9 +21,12 @@ class Conversation(BaseModel):
         "Message", back_populates="conversation", order_by="Message.created_on"
     )
 
+    repos = db.Column(db.JSON, nullable=True)
+
     def as_dict(self):
         return {
             "id": self.id,
             "pdf_id": self.pdf_id,
             "messages": [m.as_dict() for m in self.messages],
+            "repos": self.repos
         }

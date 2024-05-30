@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  aifred:
+    build: .
+    container_name: aifred_container
+    ports:
+      - "8000:8000"
+    restart: always
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy_container
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always

@@ -1,10 +1,10 @@
 services:
-  backend:
-    build: ./backend
+  app:
+    build: ./app
     ports:
       - "127.0.0.1:8069:8069"
     volumes:
-      - ./backend:/app
+      - ./app:/app
 
   frontend:
     build: ./aifred-client
@@ -13,4 +13,4 @@ services:
     volumes:
       - ./frontend:/app
     depends_on:
-      - backend
+      - app

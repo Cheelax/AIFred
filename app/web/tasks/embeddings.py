@@ -1,7 +1,7 @@
 from celery import shared_task
 
-from app.web.db.models import Pdf
-from app.web.files import download
+from web.db.models import Pdf
+from web.files import download
 from app.chat import create_embeddings_for_pdf
 
 

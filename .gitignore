@@ -12,7 +12,6 @@
 # next.js
 /aifred-client/.next/
 /aifred-client/out/
-
 # production
 /aifred-client/build
 
@@ -38,3 +37,7 @@ next-env.d.ts
 backend/__pycache__/
 backend/Code/
 backend/docs/
+
+/app/.venv/
+/app/web/__pycache__/
+/app/web/celery/__pycache__/

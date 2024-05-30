@@ -8,6 +8,7 @@ pipenv install
 
 # Create a virtual environment
 pipenv shell
+export OPENAI_API_KEY=your-api-key
 
 # Initialize the database
 flask --app app.web init-db

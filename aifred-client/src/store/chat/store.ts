@@ -12,7 +12,7 @@ export const useChatStore = create<
   ChatState & {
     // Ajouter des méthodes pour agir sur l'état
     fetchConversations: (documentId: string) => Promise<void>;
-    createConversation: (documentId: string) => Promise<Conversation>;
+    createConversation: (documentId: string, repos?: any[]) => Promise<Conversation>;
     setActiveConversationId: (id: string) => void;
     insertMessageToActive: (message: Message) => void;
     removeMessageFromActive: (id: number) => void;
@@ -65,9 +65,9 @@ export const useChatStore = create<
     // console.log(activeConversation);
     return activeConversation;
   },
-  createConversation: async (documentId) => {
+  createConversation: async (documentId, repos = []) => {
     const { data } = await api.post<Conversation>(
-      `/conversations?pdf_id=${documentId}`
+      `/conversations?pdf_id=${documentId}`, { repos }
     );
 
     set((state) => ({

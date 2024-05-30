@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-// import { useChat } from "@/providers/chatProvider"; // Ajustez selon votre implémentation
+import React, { useState, useEffect } from "react";
 import { Alert } from "../../components/ui/alert";
 import ChatInput from "./chatInput";
 import ChatList from "./chatList";
 import ConversationSelect from "./conversationSelect";
-// import { sendMessage } from "@/store/chat";
 import { useChatStore } from "@/store/chat/store";
 import { useMessageSender } from "@/hooks/useMessageSender";
-// Assurez-vous que les chemins d'importation sont corrects pour vos composants
 
 interface ChatComponentProps {
   onSubmit: (content: string, useStreaming: boolean, id: string) => void;
@@ -16,6 +13,8 @@ interface ChatComponentProps {
 
 const ChatPanel: React.FC<ChatComponentProps> = ({ onSubmit, documentId }) => {
   const [useStreaming, setUseStreaming] = useState<boolean>(true);
+  const [repoUsernames, setRepoUsernames] = useState<string[]>(['']);
+
   const {
     getActiveConversation,
     activeConversationId,
@@ -27,7 +26,7 @@ const ChatPanel: React.FC<ChatComponentProps> = ({ onSubmit, documentId }) => {
     resetError,
   } = useChatStore();
 
-  const { sendMessage } = useMessageSender();
+  const { sendMessage, createConversationWithRepos } = useMessageSender();
 
   const [activeConversation, setActiveConversation] = useState(
     getActiveConversation()
@@ -56,7 +55,6 @@ const ChatPanel: React.FC<ChatComponentProps> = ({ onSubmit, documentId }) => {
   }, [useStreaming]);
 
   useEffect(() => {
-    console.log("useEffect for fetchConversations");
     if (documentId) {
       fetchConversations(documentId);
     }
@@ -64,18 +62,33 @@ const ChatPanel: React.FC<ChatComponentProps> = ({ onSubmit, documentId }) => {
 
   useEffect(() => {
     if (activeConversationId) {
-      console.log("setActiveFromObject");
-      console.log("activeConversation", getActiveConversation());
-      console.log("conversations", conversations);
-      console.log(activeConversationId);
       setActiveConversation(getActiveConversation());
     } else {
       setActiveConversationId("0");
     }
-  }, [setActiveConversationId, setActiveConversationId, conversations]);
+  }, [activeConversationId, getActiveConversation, setActiveConversationId, conversations]);
 
   const handleNewChat = () => {
     createConversation(documentId);
+  };
+
+  const handleCreateConversationWithRepos = async () => {
+    try {
+      await createConversationWithRepos(documentId, repoUsernames);
+      setRepoUsernames(['']);
+    } catch (error) {
+      console.error("Failed to create conversation with repos", error);
+    }
+  };
+
+  const handleUsernameChange = (index: number, value: string) => {
+    const updatedUsernames = [...repoUsernames];
+    updatedUsernames[index] = value;
+    setRepoUsernames(updatedUsernames);
+  };
+
+  const addUsernameField = () => {
+    setRepoUsernames([...repoUsernames, '']);
   };
 
   const handleSubmit = (text: string, id: string) => {
@@ -113,7 +126,31 @@ const ChatPanel: React.FC<ChatComponentProps> = ({ onSubmit, documentId }) => {
           >
             New Chat
           </button>
+          <button
+            className="rounded text-sm border border-blue-500 px-2 py-0.5"
+            onClick={handleCreateConversationWithRepos}
+          >
+            New Chat with Repos
+          </button>
         </div>
+      </div>
+      <div className="px-3 py-2">
+        {repoUsernames.map((username, index) => (
+          <input
+            key={index}
+            type="text"
+            value={username}
+            onChange={(e) => handleUsernameChange(index, e.target.value)}
+            placeholder="Enter GitHub username"
+            className="border rounded px-2 py-1 mb-2 w-full"
+          />
+        ))}
+        <button
+          className="rounded text-sm border border-blue-500 px-2 py-0.5 mb-2"
+          onClick={addUsernameField}
+        >
+          Add Another Username
+        </button>
       </div>
       <div className="flex flex-col flex-1 px-3 py-2 overflow-y-scroll">
         <ChatList

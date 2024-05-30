@@ -1,5 +1,5 @@
 import uuid
-from app.web.db import db
+from web.db import db
 from .base import BaseModel
 
 
