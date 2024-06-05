@@ -23,7 +23,7 @@ const useGithubRepos = (username: string) => {
         });
         setRepos(response.data.linked_repos);
       } catch (err) {
-        setError(err);
+        // setError(err);
       } finally {
         setLoading(false);
       }

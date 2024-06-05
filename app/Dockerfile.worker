@@ -1,0 +1,16 @@
+# Utiliser une image de base officielle de Python
+FROM python:3.9
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+RUN pip install invoke
+
+# Installer pipenv et les dépendances
+RUN pip install pipenv && pipenv lock && pipenv install --system --deploy
+
+# Copier le reste de l'application
+COPY app/ ./
+
+# Définir la commande pour lancer le worker Celery
+CMD ["invoke", "devworker"]

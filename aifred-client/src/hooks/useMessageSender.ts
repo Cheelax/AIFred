@@ -9,7 +9,7 @@ import {
 } from "../store/chat/store";
 import { useStreaming } from "../store/chat/stream";
 import { useSync } from "../store/chat/sync";
-import { getPublicRepos } from '../utils/github';
+// import { getPublicRepos } from '../utils/github';
 
 export const useMessageSender = () => {
   const { sendMessage: sendStreamingMessage } = useStreaming();
@@ -21,17 +21,17 @@ export const useMessageSender = () => {
       : sendSyncMessage(message, opts);
   };
 
-  const fetchPublicRepos = async (username: string) => {
-    return await getPublicRepos(username);
-  };
+  // const fetchPublicRepos = async (username: string) => {
+  //   return await getPublicRepos(username);
+  // };
 
   const createConversationWithRepos = async (pdfId: string, repoUsernames: string[]) => {
     const allRepos = [];
     for (const username of repoUsernames) {
-      const repos = await fetchPublicRepos(username);
-      allRepos.push(...repos);
+      // const repos = await fetchPublicRepos(username);
+      // allRepos.push(...repos);
     }
-    return await createConversation(pdfId,allRepos);
+    // return await createConversation(pdfId,allRepos);
   };
 
   return {
@@ -41,7 +41,7 @@ export const useMessageSender = () => {
     fetchConversations,
     createConversation,
     scoreConversation,
-    fetchPublicRepos,
+    // fetchPublicRepos,
     createConversationWithRepos,
   };
 };

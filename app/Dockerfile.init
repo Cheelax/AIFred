@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+# Définir le répertoire de travail
+
+RUN pip install invoke
+# Copier Pipfile et Pipfile.lock
+COPY Pipfile Pipfile.lock ./
+# Installer pipenv et, les dépendances
+RUN pip install pipenv && pipenv lock && pipenv install --system --deploy
+
+# Vérifier que Flask est installé
+#RUN pipenv run pip list | grep Flask
+
+# Copier le reste de l'application
+COPY ./ ./
+
+# Exposer le port utilisé par Flask (8000)
+EXPOSE 8000
+
+# Copier le script d'entrée
+# COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x ./app/entrypoint.sh
+
+# Définir le script d'entrée
+ENTRYPOINT ["./app/entrypoint.sh"]

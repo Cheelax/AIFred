@@ -1,11 +1,4 @@
 services:
-  app:
-    build: ./app
-    ports:
-      - "127.0.0.1:8069:8069"
-    volumes:
-      - ./app:/app
-
   frontend:
     build: ./aifred-client
     ports:
@@ -13,4 +6,43 @@ services:
     volumes:
       - ./frontend:/app
     depends_on:
-      - app
+      - web
+
+  web:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - APP_ENV=development
+    volumes:
+      - ./app:/app
+    depends_on:
+      - redis
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile.worker
+    environment:
+      - APP_ENV=development
+    volumes:
+      - ./app:/app
+    depends_on:
+      - init
+  init:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile.init
+    environment:
+      - APP_ENV=development
+    volumes:
+      - ./app:/app
+    depends_on:
+      - redis
+      - web
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
