@@ -21,5 +21,6 @@ EXPOSE 8000
 # COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x ./app/entrypoint.sh
 
+RUN python ./web/db/__init.py init-db
 # Définir le script d'entrée
 ENTRYPOINT ["./app/entrypoint.sh"]

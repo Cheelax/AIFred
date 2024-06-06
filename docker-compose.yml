@@ -30,18 +30,18 @@ services:
     volumes:
       - ./app:/app
     depends_on:
-      - init
-  init:
-    build:
-      context: .
-      dockerfile: ./app/Dockerfile.init
-    environment:
-      - APP_ENV=development
-    volumes:
-      - ./app:/app
-    depends_on:
-      - redis
       - web
+  # init:
+  #   build:
+  #     context: .
+  #     dockerfile: ./app/Dockerfile.init
+  #   environment:
+  #     - APP_ENV=development
+  #   volumes:
+  #     - ./app:/app
+  #   depends_on:
+  #     - redis
+  #     - web
   redis:
     image: "redis:alpine"
     ports:

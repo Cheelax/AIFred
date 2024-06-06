@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from .db import db, init_db_command, models
+from .db import db, init_db_command, models, init_db_if_not_exists
 from app.celeryapi import celery_init_app
 from .config import Config
 from .hooks import load_logged_in_user, handle_error, add_headers
@@ -41,6 +41,7 @@ def create_app():
     register_blueprints(app)
     if Config.CELERY["broker_url"]:
         celery_init_app(app)
+    init_db_if_not_exists(app)
 
     return app
 
